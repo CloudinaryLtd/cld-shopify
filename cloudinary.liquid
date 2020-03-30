@@ -1,0 +1,31 @@
+{%comment%}
+This snippet is used to generate cloudinary URLs
+{%endcomment%}
+
+{%if settings.cloudinaryEnable and settings.cloudinaryCloud != blank and settings.cloudinaryDeliveryUrl != blank%}
+  {%assign image_metadata = cld_current_product.metafields.image_metadata %}
+  {%assign metadata_key = "" | append: cld_current_product.featured_image.id %}
+  {%assign cld_image_route = "image/upload" %}
+  {%assign cld_video_route = "video/upload" %}
+  {%assign cld_optimization_options = "f_auto,q_auto" %}
+  {%assign cld_responsive_options = "w_auto,c_scale" %}
+  {%capture cld_url %}
+  {{settings.cloudinaryDeliveryUrl}}/{{settings.cloudinaryCloud}}/{{cld_image_route}}/{{cld_optimization_options}}/{{cld_responsive_options}}/{{image_metadata[metadata_key]}}
+  {%endcapture%}
+  {% assign cloudinary_url = cld_url %}
+  
+  {%comment%}
+    This is to debug.  Comment out the script tag below in prod.
+
+  {%endcomment%}
+
+  <script>
+    console.log("{{ cld_shopify_url }}");
+    console.log("{{ metadata_key}}");
+    console.log("{{ image_metadata[metadata_key]}}");
+    console.log("{{- cloudinary_url | url_encode}}");
+  </script>
+
+{% else %}
+     {% assign cloudinary_url = cld_shopify_url %}
+{% endif %}
